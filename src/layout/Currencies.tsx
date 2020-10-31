@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react';
+import React, { FC, Fragment, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Box, Card, Grid, IconButton, Select, CardHeader, CardContent, InputLabel, MenuItem } from '@material-ui/core';
 import { SyncAltOutlined } from '@material-ui/icons';
@@ -7,6 +7,7 @@ import { Currencies as CurrenciesEnum } from 'src/types';
 import { useQuery } from 'react-query';
 import { api } from 'api';
 import { Amounts } from './Amounts';
+import { Dynamics } from './Dynamics';
 
 const currArrayFull = Object.values(CurrenciesEnum);
 const currArray = currArrayFull.splice(0, currArrayFull.length / 2) as string[];
@@ -19,7 +20,7 @@ const menuItems = currArray.map((key) => (
 
 const useStyles = makeStyles((theme) => ({
   card: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(4),
   },
   select: {
     width: '100%',
@@ -47,40 +48,43 @@ export const Currencies: FC = () => {
   });
 
   return (
-    <Card className={card} elevation={3}>
-      <CardHeader title="Currency converter" subheader={`Today, ${format(new Date(), 'dd-MM-yyyy')}`} />
-      <CardContent>
-        <Grid container spacing={1}>
-          <Grid item xl>
-            <InputLabel id="from">From</InputLabel>
-            <Select
-              value={from}
-              onChange={(event) => setFrom(event.target.value as string)}
-              labelId="from"
-              className={select}
-            >
-              {menuItems}
-            </Select>
+    <Fragment>
+      <Card className={card} elevation={3}>
+        <CardHeader title="Currency converter" subheader={`Today, ${format(new Date(), 'dd-MM-yyyy')}`} />
+        <CardContent>
+          <Grid container spacing={1}>
+            <Grid item xl>
+              <InputLabel id="from">From</InputLabel>
+              <Select
+                value={from}
+                onChange={(event) => setFrom(event.target.value as string)}
+                labelId="from"
+                className={select}
+              >
+                {menuItems}
+              </Select>
+            </Grid>
+            <Grid item xl={1} component={Box} display="flex" justifyContent="center">
+              <IconButton color="secondary">
+                <SyncAltOutlined />
+              </IconButton>
+            </Grid>
+            <Grid item xl>
+              <InputLabel id="to">To</InputLabel>
+              <Select
+                value={to}
+                onChange={(event) => setTo(event.target.value as string)}
+                labelId="to"
+                className={select}
+              >
+                {menuItems}
+              </Select>
+            </Grid>
           </Grid>
-          <Grid item xl={1} component={Box} display="flex" justifyContent="center">
-            <IconButton color="secondary">
-              <SyncAltOutlined />
-            </IconButton>
-          </Grid>
-          <Grid item xl>
-            <InputLabel id="to">To</InputLabel>
-            <Select
-              value={to}
-              onChange={(event) => setTo(event.target.value as string)}
-              labelId="to"
-              className={select}
-            >
-              {menuItems}
-            </Select>
-          </Grid>
-        </Grid>
-        <Amounts fromAmount={fromAmount} toAmount={toAmount} recalculate={recalculate} />
-      </CardContent>
-    </Card>
+          <Amounts fromAmount={fromAmount} toAmount={toAmount} recalculate={recalculate} />
+        </CardContent>
+      </Card>
+      <Dynamics from={from} to={to} />
+    </Fragment>
   );
 };

@@ -43,6 +43,15 @@ module.exports = {
       [
         'babel-plugin-import',
         {
+          libraryName: '@material-ui/pickers',
+          libraryDirectory: 'esm',
+          camel2DashComponentName: false,
+        },
+        'pickers',
+      ],
+      [
+        'babel-plugin-import',
+        {
           libraryName: 'date-fns',
           libraryDirectory: 'esm',
           camel2DashComponentName: false,
