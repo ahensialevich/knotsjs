@@ -1,18 +1,22 @@
-import React from 'react';
+import React, { FC } from 'react';
+import { CssBaseline } from '@material-ui/core';
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { QueryCache, ReactQueryCacheProvider } from 'react-query';
+import { Layout } from './layout';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const theme = createMuiTheme({
+  palette: {
+    type: 'dark',
+  },
+});
 
-export default App;
+const queryCache = new QueryCache();
+
+export const App: FC = () => (
+  <ReactQueryCacheProvider queryCache={queryCache}>
+    <ThemeProvider theme={theme}>
+      <Layout />
+      <CssBaseline />
+    </ThemeProvider>
+  </ReactQueryCacheProvider>
+);
