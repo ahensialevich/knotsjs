@@ -1,28 +1,28 @@
-import React, { FC, useState } from 'react';
+import React, { FC, useContext, useState } from 'react';
 import { Box } from '@material-ui/core';
-import { Datum, ResponsiveLine, Serie } from '@nivo/line';
-import { FetchDynamicsResponseType } from 'src/api/types';
+import { Datum, ResponsiveLineCanvas, Serie } from '@nivo/line';
 import { useQuery } from 'react-query';
 import { api } from 'src/api';
+import { context } from 'context';
+import { getHistoryDate, dateFormat, mapToNivoData } from 'utils';
+import { format } from 'date-fns';
 
 const theme = {
   textColor: 'white',
 };
 
-const mapToNivoData = (data?: FetchDynamicsResponseType): Datum[] => {
-  if (!data) return [];
-  return Object.entries(data.rates).map(([key, value]) => ({ x: key, y: Object.values(value)[0] }));
-};
-
 type Props = {
-  from: string;
-  to: string;
-  startAt: string;
-  endAt: string;
+  selectedTab: string;
 };
 
-export const Chart: FC<Props> = ({ from, to, startAt, endAt }) => {
+const today = new Date();
+
+export const Chart: FC<Props> = ({ selectedTab }) => {
   const [nivoDatum, setNivoDatum] = useState<Datum[]>([]);
+  const { from, to } = useContext(context);
+
+  const endAt = format(today, dateFormat);
+  const startAt = getHistoryDate(today, selectedTab);
 
   useQuery(['fetchDynamics', { from, to, startAt, endAt }], api.fetchDynamics, {
     onSuccess: (data) => setNivoDatum(mapToNivoData(data)),
@@ -32,7 +32,7 @@ export const Chart: FC<Props> = ({ from, to, startAt, endAt }) => {
 
   return (
     <Box mt={2} height={300} p={1}>
-      <ResponsiveLine
+      <ResponsiveLineCanvas
         theme={theme}
         data={[nivoData]}
         curve="cardinal"
@@ -43,6 +43,7 @@ export const Chart: FC<Props> = ({ from, to, startAt, endAt }) => {
         enableArea
         enableGridY={false}
         enablePoints={false}
+        enableSlices="y"
       />
     </Box>
   );
