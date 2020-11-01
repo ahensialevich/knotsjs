@@ -36,17 +36,16 @@ export const Chart: FC<Props> = ({ selectedTab }) => {
   const nivoData: Serie = { id: 'rate', data: nivoDatum };
 
   return (
-    <Box mt={2} height={400} p={1}>
+    <Box mt={2} height={500} p={1} color="black">
       <ResponsiveLineCanvas
         theme={theme}
         data={[nivoData]}
         curve="cardinal"
-        margin={{ top: 10, right: 20, bottom: 5, left: 50 }}
+        axisTop={null}
+        margin={{ top: 15, right: 20, bottom: 70, left: 50 }}
         yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: true, reverse: false }}
-        yFormat=" >-.2f"
-        axisBottom={null}
-        enableArea
-        enableGridY={false}
+        axisBottom={{ tickRotation: -45 }}
+        yFormat=">-.2f"
         enablePoints={false}
         enableSlices="y"
       />

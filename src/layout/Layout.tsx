@@ -49,8 +49,8 @@ export const Layout: FC = () => {
           </Toolbar>
         </AppBar>
         <Container className={container}>
-          <Grid container spacing={2}>
-            <Grid item lg={6} alignItems="stretch">
+          <Grid container spacing={2} alignItems="stretch">
+            <Grid item md={6} xs={12}>
               <Converter
                 from={from}
                 to={to}
@@ -59,7 +59,7 @@ export const Layout: FC = () => {
                 onSuccessConvertion={onSuccessConvertion}
               />
             </Grid>
-            <Grid item lg={6}>
+            <Grid item md={6} xs={12}>
               <Amounts to={to} from={from} fromAmount={fromAmount} toAmount={toAmount} recalculate={recalculate} />
             </Grid>
           </Grid>

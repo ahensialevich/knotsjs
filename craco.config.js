@@ -43,11 +43,11 @@ module.exports = {
       [
         'babel-plugin-import',
         {
-          libraryName: '@material-ui/pickers',
+          libraryName: '@material-ui/lab',
           libraryDirectory: 'esm',
           camel2DashComponentName: false,
         },
-        'pickers',
+        'lab',
       ],
       [
         'babel-plugin-import',
