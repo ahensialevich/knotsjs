@@ -3,7 +3,7 @@ import { Box } from '@material-ui/core';
 import { Datum, ResponsiveLineCanvas, Serie } from '@nivo/line';
 import { useQuery } from 'react-query';
 import { api } from 'src/api';
-import { context } from 'context';
+import { appContext } from 'context';
 import { getHistoryDate, dateFormat, mapToNivoData } from 'utils';
 
 // canvas based implementation instead of SVG/HTML because of large amount of data.
@@ -24,12 +24,12 @@ const today = new Date();
 
 export const Chart: FC<Props> = ({ selectedTab }) => {
   const [nivoDatum, setNivoDatum] = useState<Datum[]>([]);
-  const { from, to } = useContext(context);
+  const context = useContext(appContext);
 
   const endAt = format(today, dateFormat);
   const startAt = getHistoryDate(today, selectedTab);
 
-  useQuery(['fetchDynamics', { from, to, startAt, endAt }], api.fetchDynamics, {
+  useQuery(['fetchDynamics', { from: context?.state.from, to: context?.state.to, startAt, endAt }], api.fetchDynamics, {
     onSuccess: (data) => setNivoDatum(mapToNivoData(data)),
   });
 

@@ -1,11 +1,8 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 import { AppBar, Container, Grid, Toolbar, Typography } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Converter, Dynamics } from 'features';
-import { context } from 'context';
 import { Amounts } from 'src/features/Converter/Amounts';
-
-const { Provider } = context;
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,50 +19,25 @@ const useStyles = makeStyles((theme) => ({
 
 export const Layout: FC = () => {
   const { root, toolbar, container } = useStyles();
-  const [from, setFrom] = useState('AUD');
-  const [to, setTo] = useState('USD');
-  const [rate, setRate] = useState(0);
-  const [fromAmount, setFromAmount] = useState(0);
-  const [toAmount, setToAmount] = useState(0);
-
-  const recalculate = (newValue: number) => {
-    setFromAmount(newValue);
-    setToAmount(newValue * rate);
-  };
-
-  const onSuccessConvertion = (newRate: number) => {
-    setRate(newRate);
-    setToAmount(fromAmount * newRate);
-  };
-
-  const contextValue = { from, to, setTo, setFrom };
 
   return (
     <main className={root}>
-      <Provider value={contextValue}>
-        <AppBar position="relative">
-          <Toolbar className={toolbar}>
-            <Typography variant="h5">Knots.js</Typography>
-          </Toolbar>
-        </AppBar>
-        <Container className={container}>
-          <Grid container spacing={2} alignItems="stretch">
-            <Grid item md={6} xs={12}>
-              <Converter
-                from={from}
-                to={to}
-                setFrom={setFrom}
-                setTo={setTo}
-                onSuccessConvertion={onSuccessConvertion}
-              />
-            </Grid>
-            <Grid item md={6} xs={12}>
-              <Amounts to={to} from={from} fromAmount={fromAmount} toAmount={toAmount} recalculate={recalculate} />
-            </Grid>
+      <AppBar position="relative">
+        <Toolbar className={toolbar}>
+          <Typography variant="h5">Knots.js</Typography>
+        </Toolbar>
+      </AppBar>
+      <Container className={container}>
+        <Grid container spacing={2} alignItems="stretch">
+          <Grid item md={6} xs={12}>
+            <Converter />
           </Grid>
-          <Dynamics />
-        </Container>
-      </Provider>
+          <Grid item md={6} xs={12}>
+            <Amounts />
+          </Grid>
+        </Grid>
+        <Dynamics />
+      </Container>
     </main>
   );
 };

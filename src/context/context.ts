@@ -1,15 +1,9 @@
-import { createContext } from 'react';
+import { createContext, Dispatch, SetStateAction } from 'react';
+import { AppState } from 'src/types';
 
 type ContextType = {
-  from: string;
-  to: string;
-  setFrom: (value: string) => void;
-  setTo: (value: string) => void;
+  state: AppState;
+  setState: Dispatch<SetStateAction<AppState>>;
 };
 
-export const context = createContext<ContextType>({
-  from: '',
-  to: '',
-  setFrom: console.log,
-  setTo: console.log,
-});
+export const appContext = createContext<ContextType | null>(null);

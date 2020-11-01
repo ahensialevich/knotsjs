@@ -1,8 +1,9 @@
-import React, { FC } from 'react';
+import React, { FC, useContext } from 'react';
 import { Box, Card, CardContent, InputLabel, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { InputNumber } from 'components';
 import { useTranslation } from 'react-i18next';
+import { appContext } from 'src/context';
 
 const useStyles = makeStyles({
   card: {
@@ -13,39 +14,33 @@ const useStyles = makeStyles({
   },
 });
 
-type Props = {
-  fromAmount: number;
-  toAmount: number;
-  to: string;
-  from: string;
-  recalculate: (newValue: number) => void;
-};
-
-export const Amounts: FC<Props> = ({ from, to, fromAmount, toAmount, recalculate }) => {
+export const Amounts: FC = () => {
   const { textField, card } = useStyles();
   const { t } = useTranslation();
+  const context = useContext(appContext);
+
+  const recalculate = (newValue: number) =>
+    context?.setState((prevState) => ({ ...prevState, fromAmount: newValue, toAmount: newValue * prevState.rate }));
 
   return (
     <Card elevation={3} className={card}>
       <CardContent>
         <InputLabel id="amount">{t('amounts.amount')}</InputLabel>
         <TextField
-          prefix={from}
           id="amount"
           onChange={(event) => recalculate(+event.target.value)}
           className={textField}
-          value={fromAmount}
-          InputProps={{ inputComponent: InputNumber as any, inputProps: { prefix: `${from} ` } }}
+          value={context?.state.fromAmount}
+          InputProps={{ inputComponent: InputNumber as any, inputProps: { prefix: `${context?.state.from} ` } }}
         />
         <Box mt={2}>
           <InputLabel id="result">{t('amounts.result')}</InputLabel>
           <TextField
-            prefix={to}
             id="result"
             disabled
-            InputProps={{ inputComponent: InputNumber as any, inputProps: { prefix: `${to} ` } }}
+            InputProps={{ inputComponent: InputNumber as any, inputProps: { prefix: `${context?.state.to} ` } }}
             className={textField}
-            value={toAmount}
+            value={context?.state.toAmount}
           />
         </Box>
       </CardContent>

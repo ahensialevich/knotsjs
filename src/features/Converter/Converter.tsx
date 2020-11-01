@@ -1,4 +1,4 @@
-import React, { FC, Fragment } from 'react';
+import React, { FC, Fragment, useContext } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Card, Select, CardHeader, CardContent, InputLabel, MenuItem, Box } from '@material-ui/core';
 import { format } from 'date-fns';
@@ -7,6 +7,7 @@ import { useQuery } from 'react-query';
 import { api } from 'api';
 import { Skeleton } from '@material-ui/lab';
 import { useTranslation } from 'react-i18next';
+import { appContext } from 'src/context';
 
 const menuItems = availableCurrencies.map((key) => (
   <MenuItem key={key} value={key}>
@@ -20,19 +21,15 @@ const useStyles = makeStyles({
   },
 });
 
-type Props = {
-  from: string;
-  to: string;
-  setTo: (value: string) => void;
-  setFrom: (value: string) => void;
-  onSuccessConvertion: (newRate: number) => void;
-};
-
-export const Converter: FC<Props> = ({ from, to, onSuccessConvertion, setTo, setFrom }) => {
+export const Converter: FC = () => {
   const { select } = useStyles();
   const { t } = useTranslation();
+  const context = useContext(appContext);
 
-  const { isFetching } = useQuery(['latest', { from, to }], api.convert, {
+  const onSuccessConvertion = (newRate: number) =>
+    context?.setState((prevState) => ({ ...prevState, rate: newRate, toAmount: prevState.fromAmount * newRate }));
+
+  const { isFetching } = useQuery(['latest', { from: context?.state.from, to: context?.state.to }], api.convert, {
     onSuccess: ({ rates }) => {
       const newRate = Object.values(rates)[0];
       onSuccessConvertion(newRate);
@@ -52,8 +49,10 @@ export const Converter: FC<Props> = ({ from, to, onSuccessConvertion, setTo, set
         ) : (
           <Fragment>
             <Select
-              value={from}
-              onChange={(event) => setFrom(event.target.value as string)}
+              value={context?.state.from}
+              onChange={(event) =>
+                context?.setState((prevState) => ({ ...prevState, from: event.target.value as string }))
+              }
               labelId="from"
               className={select}
             >
@@ -68,8 +67,10 @@ export const Converter: FC<Props> = ({ from, to, onSuccessConvertion, setTo, set
           ) : (
             <Fragment>
               <Select
-                value={to}
-                onChange={(event) => setTo(event.target.value as string)}
+                value={context?.state.to}
+                onChange={(event) =>
+                  context?.setState((prevState) => ({ ...prevState, to: event.target.value as string }))
+                }
                 labelId="to"
                 className={select}
               >
