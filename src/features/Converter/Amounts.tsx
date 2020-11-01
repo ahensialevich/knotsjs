@@ -1,39 +1,52 @@
 import React, { FC } from 'react';
-import { Grid, TextField } from '@material-ui/core';
+import { Box, Card, CardContent, InputLabel, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { InputNumber } from 'components';
 
-const useStyles = makeStyles((theme) => ({
-  container: {
-    marginTop: theme.spacing(2),
+const useStyles = makeStyles({
+  card: {
+    height: '100%',
   },
   textField: {
     width: '100%',
   },
-}));
+});
 
 type Props = {
   fromAmount: number;
   toAmount: number;
+  to: string;
+  from: string;
   recalculate: (newValue: number) => void;
 };
 
-export const Amounts: FC<Props> = ({ fromAmount, toAmount, recalculate }) => {
-  const { container, textField } = useStyles();
+export const Amounts: FC<Props> = ({ from, to, fromAmount, toAmount, recalculate }) => {
+  const { textField, card } = useStyles();
 
   return (
-    <Grid className={container} container spacing={3}>
-      <Grid item xl>
-        <TextField onChange={(event) => recalculate(+event.target.value)} className={textField} value={fromAmount} />
-      </Grid>
-      <Grid item xl>
+    <Card elevation={3} className={card}>
+      <CardContent>
+        <InputLabel id="amount">Amount</InputLabel>
         <TextField
-          disabled
-          InputProps={{ inputComponent: InputNumber as any }}
+          prefix={from}
+          id="amount"
+          onChange={(event) => recalculate(+event.target.value)}
           className={textField}
-          value={toAmount}
+          value={fromAmount}
+          InputProps={{ inputComponent: InputNumber as any, inputProps: { prefix: `${from} ` } }}
         />
-      </Grid>
-    </Grid>
+        <Box mt={2}>
+          <InputLabel id="result">Result</InputLabel>
+          <TextField
+            prefix={to}
+            id="result"
+            disabled
+            InputProps={{ inputComponent: InputNumber as any, inputProps: { prefix: `${to} ` } }}
+            className={textField}
+            value={toAmount}
+          />
+        </Box>
+      </CardContent>
+    </Card>
   );
 };

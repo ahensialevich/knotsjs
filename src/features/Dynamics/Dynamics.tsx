@@ -3,6 +3,13 @@ import { Card, Tabs, Tab, CardContent } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { Chart } from './Chart';
 
+// Better solution would be a daterange picker (like in antd), but there is no built-in material-ui picker for now. There is not very popular 3-rd party libraries only.
+// Material-ui-picker package has several different pickers, but any ranges are available
+// the logic in case of rangepicker will be similar to existing one, something like:
+// <pseudocode>
+// const onChange => (valueFrom, valueTo) => setState(...) and pass to the useQuery hook
+// <Daterangepicker onChange{([valueFrom, value2]) => onChange(valueFrom, value2)} />
+
 const useStyles = makeStyles((theme) => ({
   card: {
     marginTop: theme.spacing(4),
