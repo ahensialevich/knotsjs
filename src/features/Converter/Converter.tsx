@@ -6,6 +6,7 @@ import { availableCurrencies } from 'src/constants';
 import { useQuery } from 'react-query';
 import { api } from 'api';
 import { Skeleton } from '@material-ui/lab';
+import { useTranslation } from 'react-i18next';
 
 const menuItems = availableCurrencies.map((key) => (
   <MenuItem key={key} value={key}>
@@ -29,6 +30,7 @@ type Props = {
 
 export const Converter: FC<Props> = ({ from, to, onSuccessConvertion, setTo, setFrom }) => {
   const { select } = useStyles();
+  const { t } = useTranslation();
 
   const { isFetching } = useQuery(['latest', { from, to }], api.convert, {
     onSuccess: ({ rates }) => {
@@ -39,9 +41,12 @@ export const Converter: FC<Props> = ({ from, to, onSuccessConvertion, setTo, set
 
   return (
     <Card elevation={3}>
-      <CardHeader title="Currency converter" subheader={`Today, ${format(new Date(), 'dd-MM-yyyy')}`} />
+      <CardHeader
+        title={t('converter.header')}
+        subheader={`${t('converter.subheader')}, ${format(new Date(), 'dd-MM-yyyy')}`}
+      />
       <CardContent>
-        <InputLabel id="from">From</InputLabel>
+        <InputLabel id="from">{t('converter.from')}</InputLabel>
         {isFetching ? (
           <Skeleton variant="rect" height={32} />
         ) : (
@@ -57,7 +62,7 @@ export const Converter: FC<Props> = ({ from, to, onSuccessConvertion, setTo, set
           </Fragment>
         )}
         <Box mt={2}>
-          <InputLabel id="to">To</InputLabel>
+          <InputLabel id="to">{t('converter.to')}</InputLabel>
           {isFetching ? (
             <Skeleton variant="rect" height={32} />
           ) : (

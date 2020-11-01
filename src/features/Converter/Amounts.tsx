@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { Box, Card, CardContent, InputLabel, TextField } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { InputNumber } from 'components';
+import { useTranslation } from 'react-i18next';
 
 const useStyles = makeStyles({
   card: {
@@ -22,11 +23,12 @@ type Props = {
 
 export const Amounts: FC<Props> = ({ from, to, fromAmount, toAmount, recalculate }) => {
   const { textField, card } = useStyles();
+  const { t } = useTranslation();
 
   return (
     <Card elevation={3} className={card}>
       <CardContent>
-        <InputLabel id="amount">Amount</InputLabel>
+        <InputLabel id="amount">{t('amounts.amount')}</InputLabel>
         <TextField
           prefix={from}
           id="amount"
@@ -36,7 +38,7 @@ export const Amounts: FC<Props> = ({ from, to, fromAmount, toAmount, recalculate
           InputProps={{ inputComponent: InputNumber as any, inputProps: { prefix: `${from} ` } }}
         />
         <Box mt={2}>
-          <InputLabel id="result">Result</InputLabel>
+          <InputLabel id="result">{t('amounts.result')}</InputLabel>
           <TextField
             prefix={to}
             id="result"

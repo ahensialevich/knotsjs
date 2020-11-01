@@ -1,5 +1,6 @@
 import React, { FC, useState } from 'react';
 import { Card, Tabs, Tab, CardContent } from '@material-ui/core';
+import { useTranslation } from 'react-i18next';
 import { makeStyles } from '@material-ui/core/styles';
 import { Chart } from './Chart';
 
@@ -19,14 +20,15 @@ const useStyles = makeStyles((theme) => ({
 export const Dynamics: FC = () => {
   const { card } = useStyles();
   const [selectedTab, setSelectedTab] = useState('week');
+  const { t } = useTranslation();
 
   return (
     <Card className={card} elevation={3}>
       <CardContent>
         <Tabs value={selectedTab} onChange={(_, newValue) => setSelectedTab(newValue)}>
-          <Tab label="Last year" value="year" />
-          <Tab label="Last month" value="month" />
-          <Tab label="Last week" value="week" />
+          <Tab label={t('dynamics.tabs.lastYear')} value="year" />
+          <Tab label={t('dynamics.tabs.lastMonth')} value="month" />
+          <Tab label={t('dynamics.tabs.lastWeek')} value="week" />
         </Tabs>
         <Chart selectedTab={selectedTab} />
       </CardContent>
